@@ -1,0 +1,34 @@
+(1) SCENARIO: [A] -> remove(A) -> [ ]: ***UNABLE TO RUN/COMPLETE test_A_removeA_emptySet***
+    This is the first bug I ran into. To start, I placed a breakpoint on line 81 of ArraySet
+    because this was the line before the first line of the thrown exception. I know sometimes
+    the error can happen the line before the thrown error.
+    Moved my breakpoint up to see what's happening in the while loop above where the exception
+    is thrown (line 68). Looks like the while loop is never entered because on of the conditions
+    (i < rear) is false (i = 0, rear = 0) and immediately dropping the program down to the if 
+    statement to throw the exception. Since this array has one element, it should have a rear 
+    value of 1 (rear is the next open index). I've placed a watch on rear and will set the
+    breakpoint higher up, where the element is being added to the array (line 55).
+    Walking through the add() method, rear is never updated when we add the element. Rear should
+    be incremented once. I've added rear++; after line 59. This change has fixed the exception and
+    we're now able to run more tests (93 instead of 51).
+
+(2) NEW EMPTY SET: emptySet_testIsEmpty ***FAIL***
+    When we create a new empty set, the testIsEmpty test is failing. I will start by putting a 
+    breakpoint in the constructor of ArraySet, on line 29.
+    The constructor looks to be initializing the array correctly. I will move on to the isEmpty()
+    method, putting a breakpoint at line 40. The method is returning true if rear > 0, which doesn't 
+    make sense - an empty array would have a rear value of 0, since 0 would be the first available
+    index. Updating the code on line 40 to say return(rear == 0);
+    Making this change fixed a lot of the tests that were failing. We now can run 93 tests out of 111
+    and pass 91 of those tests.
+
+(3) SCENARIO: [A] -> add(B) -> [A,B]: java.lang.ArrayIndexOutOfBoundsException: Index 2 out of bounds for length 2
+    I will start by putting a breakpoint on the line before where the exception is being thrown (line 75
+    of ArraySet).
+    It looks like the logic of adjusting the array after an element is removed is not right. The original code
+    is moving all elements after the removed element once space forward, when they should really be moving
+    one space backwards. I've adjusted line 75 to be setArray[i] = setArray[i-1];
+    That didn't fix the problem, created new errors. I've put the original line of code back in.
+
+
+
