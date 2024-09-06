@@ -72,8 +72,13 @@ public class ArraySet<T> implements SimpleSet<T> {
 				//shift all following elements one space forward
 				//so there are no gaps in the array
 				while (i < rear) {
-					setArray[i] = setArray[i+1];
-					i++;
+					if (i == (rear - 1)) {
+						setArray[i] = null;
+						i++;
+					} else {
+						setArray[i] = setArray[i+1];
+						i++;
+					}
 				}
 			}
 			i++;

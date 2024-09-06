@@ -3,8 +3,8 @@
     because this was the line before the first line of the thrown exception. I know sometimes
     the error can happen the line before the thrown error.
     Moved my breakpoint up to see what's happening in the while loop above where the exception
-    is thrown (line 68). Looks like the while loop is never entered because on of the conditions
-    (i < rear) is false (i = 0, rear = 0) and immediately dropping the program down to the if 
+    is thrown (line 68). Looks like the while loop is never entered because one of the conditions
+    (i < rear) is false (i = 0, rear = 0) and immediately drops the program down to the if 
     statement to throw the exception. Since this array has one element, it should have a rear 
     value of 1 (rear is the next open index). I've placed a watch on rear and will set the
     breakpoint higher up, where the element is being added to the array (line 55).
@@ -23,12 +23,16 @@
     and pass 91 of those tests.
 
 (3) SCENARIO: [A] -> add(B) -> [A,B]: java.lang.ArrayIndexOutOfBoundsException: Index 2 out of bounds for length 2
-    I will start by putting a breakpoint on the line before where the exception is being thrown (line 75
-    of ArraySet).
-    It looks like the logic of adjusting the array after an element is removed is not right. The original code
-    is moving all elements after the removed element once space forward, when they should really be moving
-    one space backwards. I've adjusted line 75 to be setArray[i] = setArray[i-1];
-    That didn't fix the problem, created new errors. I've put the original line of code back in.
+    I will start by putting a breakpoint on the line before where the exception is being thrown (line 74
+    of ArraySet in the remove() method).
+    The program is automatically throwing the exception without me being able to see what the values are, so I'm 
+    adding another breakpoint at line 75 so I can see what happens and what the values are before the exception
+    is thrown.
+    The issue is that when the method is shifting all elements left to remove the gap, it's trying to set the last
+    value to a value that's outside of the array set. To fix this, we can add an if/else statement inside the while
+    loop to check if i is 1 less than rear. If it is, then the element at i should be set to null and i incremented
+    so we exit the loop. If not 1 less than rear, then the loop should continue to shift the elements left.
+    Fixing this gave us 111 out of 111 bugs passing the test. Yay!
 
 
 
